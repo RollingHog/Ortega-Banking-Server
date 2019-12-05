@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS users(
   user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  nick TINYTEXT UNIQUE,
-  full_name TINYTEXT,
-  race TINYTEXT NOT NULL,
-  race2 TINYTEXT NOT NULL DEFAULT(1),
+  nick CHAR UNIQUE,
+  full_name CHAR,
+  race CHAR NOT NULL,
+  race2 CHAR NOT NULL DEFAULT(1),
   guild INT NOT NULL DEFAULT(2),
   alive BOOLEAN NOT NULL DEFAULT(TRUE),
   registrator_id INT,
@@ -21,8 +21,6 @@ CREATE TABLE IF NOT EXISTS registrators(
   banking BOOLEAN,
   FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
-
-DROP TABLE IF EXISTS guild_names;
 
 CREATE TABLE IF NOT EXISTS guild_names(
   type_id INTEGER PRIMARY KEY,
@@ -156,6 +154,7 @@ CREATE TABLE IF NOT EXISTS transactions(
   to_acc INT,
   currency_type INT,
   currency_amount INT,
+  operation_datetime DATETIME NOT NULL DEFAULT(datetime('now', 'localtime')),
   FOREIGN KEY (from_acc) REFERENCES accounts (acc_id),
   FOREIGN KEY (to_acc) REFERENCES accounts (acc_id)
   FOREIGN KEY (currency_type) REFERENCES currency_types (type_id)
@@ -204,6 +203,7 @@ INSERT INTO races (type_name) VALUES
   ("Шурп"),
   ("Энлимиец"),
   ("Прочее");
+
 -- CREATE TRIGGER IF NOT EXISTS on_new_user BEFORE INSERT ON users BEGIN
   -- UPDATE cards SET card_id = (SELECT MAX(card_id) FROM cards) + 1 WHERE card_id = NEW.card_id;
 -- END;
